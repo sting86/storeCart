@@ -7,32 +7,21 @@
 package net.sourceforge.zbar.android.CameraTest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import net.sourceforge.zbar.android.CameraTest.CameraPreview;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ArrayAdapter;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -40,12 +29,9 @@ import android.widget.ListView;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 
 import android.widget.TextView;
-import android.graphics.ImageFormat;
-
 /* Import ZBar Class files */
 import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Image;
@@ -111,7 +97,7 @@ class ProductsListAdapter extends BaseAdapter {
 				
 		holder.lpText.setText("" + (position + 1));
 		holder.barcodeText.setText(productArray.get(position).getProductName());
-		holder.priceText.setText(productArray.get(position).getProductPrice().toString());
+		holder.priceText.setText(String.format("%.2f", productArray.get(position).getProductPrice()));
 		
 		return convertView;
 	}
@@ -133,6 +119,7 @@ public class CameraTestActivity extends Activity
 
 	TextView scanText;
 	ImageView scanButton;
+	TextView priceSumText;
 
 	ImageScanner scanner;
 
@@ -146,6 +133,14 @@ public class CameraTestActivity extends Activity
 		System.loadLibrary("iconv");
 	} 
 
+	private void refreshPriceSum() {
+		Float sum = new Float(0);
+		for (String item: products) {
+			sum += dbStub.getProductById(item).getProductPrice();
+		}
+		priceSumText.setText(String.format("%.2f", sum) );
+	}
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -166,6 +161,7 @@ public class CameraTestActivity extends Activity
 		//        scanText = (TextView)findViewById(R.id.scanText);
 
 		scanButton = (ImageView)findViewById(R.id.ScanImage);
+		priceSumText = (TextView)findViewById(R.id.priceSum);
 
 		dbStub = new DBStub();
 		products = new ArrayList<String>();
@@ -187,6 +183,7 @@ public class CameraTestActivity extends Activity
 				}
 			}
 		});
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);//TODO: consider that, or maybe power management options is better idea.
 	}
 
 	public void onPause() {
@@ -256,6 +253,7 @@ public class CameraTestActivity extends Activity
 					if (product != null) {
 						products.add(scannedCode);
 						productListAdapter.addItem(product);
+						refreshPriceSum();
 					}
 					productListAdapter.notifyDataSetChanged();
 					barcodeScanned = true;

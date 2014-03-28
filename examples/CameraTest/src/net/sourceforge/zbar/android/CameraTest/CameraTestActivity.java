@@ -58,18 +58,19 @@ class ProductsListAdapter extends BaseAdapter {
 	private static class ViewHolder {
 		TextView lpText;
 		TextView barcodeText;
+		TextView priceText;
 	}
 
-	ArrayList<String> productArray;
+	ArrayList<ProductItem> productArray;
 	private Context mContext;
 	
 	public ProductsListAdapter(Context context) {
 		super();
 		mContext = context;
-		productArray = new ArrayList<String>();
+		productArray = new ArrayList<ProductItem>();
 	}
 	
-	public void addItem(String s) {
+	public void addItem(ProductItem s) {
 		productArray.add(s);
 	}
 
@@ -91,6 +92,8 @@ class ProductsListAdapter extends BaseAdapter {
 				R.id.lp_text);
 		holder.barcodeText = (TextView) view.findViewById(
 				R.id.barcode_string);
+		holder.priceText = (TextView) view.findViewById(
+				R.id.price);
 		view.setTag(holder);
 		return view;
 	}
@@ -105,9 +108,10 @@ class ProductsListAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			convertView = createView(holder);
 		}
-		
+				
 		holder.lpText.setText("" + (position + 1));
-		holder.barcodeText.setText(productArray.get(position));
+		holder.barcodeText.setText(productArray.get(position).getProductName());
+		holder.priceText.setText(productArray.get(position).getProductPrice().toString());
 		
 		return convertView;
 	}
@@ -124,6 +128,8 @@ public class CameraTestActivity extends Activity
 	private Camera mCamera;
 	private CameraPreview mPreview;
 	private Handler autoFocusHandler;
+	private DBStub dbStub;
+	private ArrayList<String> products;
 
 	TextView scanText;
 	ImageView scanButton;
@@ -161,6 +167,8 @@ public class CameraTestActivity extends Activity
 
 		scanButton = (ImageView)findViewById(R.id.ScanImage);
 
+		dbStub = new DBStub();
+		products = new ArrayList<String>();
 
 		productsListView = (ListView) findViewById(R.id.listView1);
 
@@ -241,9 +249,14 @@ public class CameraTestActivity extends Activity
 				mCamera.stopPreview();
 
 				SymbolSet syms = scanner.getResults();
-				for (Symbol sym : syms) {
+				for (Symbol sym : syms) {//in final version it will be unable to scan more then one product in row 
 					//                        scanText.setText("barcode result " + sym.getData());
-					productListAdapter.addItem(sym.getData());
+					String scannedCode = sym.getData();
+					ProductItem product = dbStub.getProductById(scannedCode);
+					if (product != null) {
+						products.add(scannedCode);
+						productListAdapter.addItem(product);
+					}
 					productListAdapter.notifyDataSetChanged();
 					barcodeScanned = true;
 					playScannedNotification();

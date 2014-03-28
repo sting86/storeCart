@@ -21,6 +21,7 @@ public final class R {
         public static final int cameraPreview=0x7f060000;
         public static final int listView1=0x7f060004;
         public static final int lp_text=0x7f060006;
+        public static final int price=0x7f060008;
         public static final int scanText=0x7f060001;
         public static final int textView1=0x7f060003;
     }

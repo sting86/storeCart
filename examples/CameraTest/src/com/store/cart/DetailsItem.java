@@ -1,4 +1,4 @@
-package net.sourceforge.zbar.android.CameraTest;
+package com.store.cart;
 
 public class DetailsItem {
 	String description;

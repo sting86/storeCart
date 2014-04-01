@@ -1,4 +1,4 @@
-package net.sourceforge.zbar.android.CameraTest;
+package com.store.cart;
 
 import java.util.HashMap;
 
@@ -39,6 +39,11 @@ public class DBStub {
 				"Wagon H0 towarowy", Float.valueOf((float) 37)));
 		details.put("5904134931726", new DetailsItem(
 				"Model do sklejania wagonu towarowego typu F z kabiną hamowniczego. Skala H0 - 1:87."));
+		
+		database.put("5903621062622", new ProductItem(
+				"LM", Float.valueOf((float) 37)));
+		details.put("5903621062622", new DetailsItem(
+				"Dokarmianie raka"));
 	}
 	
 	public DetailsItem getDetailsById(String id) {

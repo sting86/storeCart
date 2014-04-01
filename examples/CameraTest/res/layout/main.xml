@@ -1,28 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-
-  <FrameLayout
-    android:id="@+id/cameraPreview"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
-  />
+    android:orientation="horizontal" 
+    android:weightSum="3">
 
-  <TextView
-    android:id="@+id/scanText"
-    android:text="Scanning..."
-    android:layout_height="wrap_content" 
-    android:layout_width="match_parent">
-  </TextView>
-  <Button
-    android:id="@+id/ScanButton"
-    android:text="Scan"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-  />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent" 
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/list_title"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent" 
+        android:layout_weight="1"
+        android:weightSum="3"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/price_sum"/>
+       <TextView
+            android:id="@+id/priceSum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearance" />
+        <LinearLayout
+        	android:layout_width="match_parent"
+        	android:layout_height="0dp"
+        	android:layout_weight="1"
+        	android:gravity="center">
+
+            <ImageView
+                android:id="@+id/ScanImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo" />
+        	
+    	</LinearLayout>
+    	<LinearLayout
+        	android:layout_width="match_parent"
+        	android:layout_height="0dp"
+        	android:layout_weight="2"
+        	android:orientation="vertical">
+            <SurfaceView 
+    	    	android:id="@+id/cameraPreview"
+    	    	android:layout_width="match_parent"
+    	    	android:layout_height="match_parent"
+    	    />
+    	</LinearLayout>
+	</LinearLayout>
 </LinearLayout>
